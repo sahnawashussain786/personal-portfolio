@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void: #05010f;
+  --color-abyss: #0a0620;
+  --color-neon: #22d3ee;
+  --color-pulse: #8b5cf6;
+  --color-bloom: #e879f9;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+section[id] {
+  scroll-margin-top: 88px;
+}
+
+body {
+  background: var(--color-void);
+  color: #e2e8f0;
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.45);
+  color: #fff;
+}
+
+/* --------------------------------- scrollbar -------------------------------- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #05010f;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #22d3ee, #8b5cf6, #e879f9);
+  border-radius: 8px;
+  border: 2px solid #05010f;
+}
+
+/* ------------------------------ custom cursor ------------------------------- */
+@media (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* ------------------------------- text effects ------------------------------- */
+.text-gradient {
+  background: linear-gradient(100deg, #22d3ee 0%, #8b5cf6 45%, #e879f9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(226, 232, 240, 0.75);
+}
+
+.text-outline-faint {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(148, 163, 184, 0.16);
+}
+
+/* ---------------------------------- glass ----------------------------------- */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* ---------------------------------- noise ----------------------------------- */
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* -------------------------------- keyframes --------------------------------- */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 34s linear infinite;
+}
+.animate-marquee-reverse {
+  animation: marquee 44s linear infinite reverse;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+.animate-float-y {
+  animation: float-y 5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.55);
+  }
+  50% {
+    opacity: 0.75;
+    box-shadow: 0 0 0 7px rgba(34, 211, 238, 0);
+  }
+}
+.animate-pulse-dot {
+  animation: pulse-dot 2.2s ease-in-out infinite;
+}
+
+@keyframes gradient-x {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+.animate-gradient-x {
+  background-size: 220% 220%;
+  animation: gradient-x 6s ease infinite;
+}
+
+/* ------------------------------ marquee masks ------------------------------- */
+.marquee-mask {
+  mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+}
+
+/* ------------------------------ lenis smoothness ---------------------------- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
