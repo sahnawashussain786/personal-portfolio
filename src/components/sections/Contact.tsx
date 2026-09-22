@@ -45,22 +45,29 @@ export default function Contact() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const json = (await res.json()) as { ok: boolean; error?: string };
+      const json = (await res.json()) as {
+        ok: boolean;
+        error?: string;
+        mode?: "smtp" | "client-relay";
+      };
 
-      if (res.ok && json.ok) {
-        setStatus("sent");
-        form.reset();
-        return;
-      }
-
-      // Server rejected (rate limit, relay blocked…) → browser relay fallback.
-      if (res.status !== 400) {
+      if (res.ok && json.ok && json.mode === "client-relay") {
+        // API validated the payload; the visitor's browser completes delivery.
         const relayOk = await submitViaRelay(payload);
         if (relayOk) {
           setStatus("sent");
           form.reset();
           return;
         }
+        setStatus("error");
+        setError("Almost there — the message service is warming up. Please try once more in a minute.");
+        return;
+      }
+
+      if (res.ok && json.ok) {
+        setStatus("sent");
+        form.reset();
+        return;
       }
 
       setStatus("error");

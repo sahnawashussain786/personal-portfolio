@@ -16,10 +16,12 @@ import { NextResponse } from "next/server";
  *    (Create the App Password at https://myaccount.google.com/apppasswords —
  *     requires 2-Step Verification enabled on the Google account.)
  *
- * 2. RELAY FALLBACK (zero config):
- *    Forwards to FormSubmit (https://formsubmit.co). The very first message
- *    triggers an activation email to CONTACT_TO — click the link once and all
- *    later messages land in the Gmail inbox.
+ * 2. CLIENT RELAY FALLBACK (zero config):
+ *    In relay mode the API answers 200 {mode:"client-relay"} and the
+ *    visitor's browser posts the message to FormSubmit, which delivers it
+ *    to CONTACT_TO. (FormSubmit accepts browser origins but blocks
+ *    datacenter IPs, so the server itself must not call it. The very first
+ *    relayed message triggers a one-time activation email — click it once.)
  */
 
 export const runtime = "nodejs";
@@ -115,27 +117,15 @@ async function deliverViaSmtp(d: Payload): Promise<void> {
   });
 }
 
-async function deliverViaRelay(d: Payload): Promise<void> {
-  // FormSubmit accepts the first submission and emails an activation link to
-  // the recipient; once activated, every message is delivered to the inbox.
-  const res = await fetch(`https://formsubmit.co/ajax/${RECIPIENT}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({
-      _subject: `[Portfolio] ${d.subject}`,
-      _template: "table",
-      _captcha: "false",
-      Name: d.name,
-      Email: d.email,
-      Message: d.message,
-    }),
-    signal: AbortSignal.timeout(4000),
-  });
-  if (!res.ok) throw new Error(`Relay responded ${res.status}`);
-}
-
 /* --------------------------------- handler -------------------------------- */
-
+// Delivery strategy
+// -----------------
+// • SMTP configured  → server sends the email directly (best mode).
+// • Relay mode       → the API responds 200 {mode:"client-relay"} and the
+//   VISITOR'S BROWSER posts to FormSubmit (it accepts browser origins but
+//   blocks datacenter IPs, so a server→relay call would always 403).
+// All soft failures return HTTP 200 with ok:false so the browser console
+// never shows scary non-2xx fetch errors for normal users.
 export async function POST(request: Request) {
   /* ------------------------------ origin checks ------------------------------ */
   // Only accept same-origin, JSON POSTs of a sane size (blocks cross-site
@@ -176,7 +166,7 @@ export async function POST(request: Request) {
   if (rateLimited(ip)) {
     return NextResponse.json(
       { ok: false, error: "Too many messages — please try again in a few minutes." },
-      { status: 429 },
+      { status: 200 },
     );
   }
 
@@ -187,18 +177,23 @@ export async function POST(request: Request) {
 
   const useSmtp = Boolean(process.env.SMTP_USER && process.env.SMTP_PASS);
 
-  try {
-    if (useSmtp) {
+  if (useSmtp) {
+    try {
       await deliverViaSmtp(result.data);
-    } else {
-      await deliverViaRelay(result.data);
+      return NextResponse.json({ ok: true, mode: "smtp" });
+    } catch (err) {
+      console.error("[contact] SMTP delivery failed:", err);
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "Message could not be sent right now — please email me directly instead.",
+        },
+        { status: 200 },
+      );
     }
-    return NextResponse.json({ ok: true, mode: useSmtp ? "smtp" : "relay" });
-  } catch (err) {
-    console.error("[contact] delivery failed:", err);
-    return NextResponse.json(
-      { ok: false, error: "Message could not be sent right now — please email me directly instead." },
-      { status: 502 },
-    );
   }
+
+  // Relay mode: hand off to the visitor's browser (server IPs are blocked
+  // by the relay service). The client completes the delivery.
+  return NextResponse.json({ ok: true, mode: "client-relay" });
 }
