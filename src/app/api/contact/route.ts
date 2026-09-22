@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import nodemailer from 'nodemailer';
 
 
 /**
@@ -138,6 +137,25 @@ async function deliverViaRelay(d: Payload): Promise<void> {
 /* --------------------------------- handler -------------------------------- */
 
 export async function POST(request: Request) {
+  /* ------------------------------ origin checks ------------------------------ */
+  // Only accept same-origin, JSON POSTs of a sane size (blocks cross-site
+  // form postings,CSRF-style abuse and oversized-payload DoS).
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("host");
+  if (origin && host && new URL(origin).host !== host) {
+    return NextResponse.json({ ok: false, error: "Forbidden." }, { status: 403 });
+  }
+
+  const contentType = request.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    return NextResponse.json({ ok: false, error: "Unsupported media type." }, { status: 415 });
+  }
+
+  const contentLength = Number(request.headers.get("content-length") ?? 0);
+  if (contentLength > 20_000) {
+    return NextResponse.json({ ok: false, error: "Payload too large." }, { status: 413 });
+  }
+
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     request.headers.get("x-real-ip") ??
