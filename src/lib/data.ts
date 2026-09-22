@@ -18,7 +18,7 @@ export const profile = {
   role: "Full-Stack Developer",
   tagline:
     "I build immersive, high-performance web experiences — pairing beautiful interfaces with backends that never blink.",
-  email: "hello@hussain.dev",
+  email: "sahnawashussain98@gmail.com",
   location: "San Francisco, CA",
   availability: "Available for new projects",
 };

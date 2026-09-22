@@ -316,6 +316,9 @@ function CameraRig() {
 
   useFrame((state, delta) => {
     const p = scrollProgress.current;
+    // Pull the camera back on narrow screens so the set-pieces stay in frame.
+    const w = state.size.width;
+    const portraitZoom = w < 480 ? 4.2 : w < 640 ? 3.4 : w < 1024 ? 2.2 : 0;
     camera.position.x = THREE.MathUtils.damp(
       camera.position.x,
       state.pointer.x * 0.7,
@@ -330,7 +333,7 @@ function CameraRig() {
     );
     camera.position.z = THREE.MathUtils.damp(
       camera.position.z,
-      7 - p * 1.2,
+      7 - p * 1.2 + portraitZoom,
       2.6,
       delta
     );

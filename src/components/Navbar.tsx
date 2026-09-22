@@ -1,12 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useSpring,
-} from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { profile } from "@/lib/data";
 
@@ -88,39 +83,33 @@ export default function Navbar() {
           </button>
         </nav>
 
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="glass overflow-hidden md:hidden"
-            >
-              <ul className="space-y-1 px-6 py-4">
-                {links.map((l, i) => (
-                  <motion.li
-                    key={l.href}
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.06 * i }}
-                  >
-                    <a
-                      href={l.href}
-                      onClick={() => setOpen(false)}
-                      className="block py-2 font-display text-lg text-slate-200"
-                    >
-                      <span className="mr-2 font-mono text-xs text-cyan-400">
-                        0{i + 1}.
-                      </span>
-                      {l.label}
-                    </a>
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Always-mounted panel: animates height/opacity on both open and
+            close, avoiding AnimatePresence exit quirks on mobile. */}
+        <motion.div
+          initial={false}
+          animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          style={{ pointerEvents: open ? "auto" : "none" }}
+          className="glass overflow-hidden md:hidden"
+          aria-hidden={!open}
+        >
+          <ul className="space-y-1 px-6 py-4">
+            {links.map((l, i) => (
+              <li key={l.href}>
+                <a
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  className="block py-2 font-display text-lg text-slate-200"
+                >
+                  <span className="mr-2 font-mono text-xs text-cyan-400">
+                    0{i + 1}.
+                  </span>
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </motion.div>
       </motion.header>
     </>
   );
