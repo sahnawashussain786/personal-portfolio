@@ -8,6 +8,10 @@ import MagneticButton from "../MagneticButton";
 import { socials, profile } from "@/lib/data";
 
 const ease = [0.16, 1, 0.3, 1] as const;
+// Recipient for the browser-side relay fallback (matches CONTACT_TO on the
+// server). FormSubmit blocks datacenter IPs, so server->relay can 403 — but it
+// accepts the visitor's own browser submission, which carries the site origin.
+const RELAY_RECIPIENT = "sahnawashussain98@gmail.com";
 const inputCls =
   "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none transition focus:border-cyan-400/60 focus:bg-white/10";
 
@@ -46,14 +50,56 @@ export default function Contact() {
       if (res.ok && json.ok) {
         setStatus("sent");
         form.reset();
-      } else {
-        setStatus("error");
-        setError(json.error ?? "Something went wrong — please try again.");
+        return;
       }
+
+      // Server rejected (rate limit, relay blocked…) → browser relay fallback.
+      if (res.status !== 400) {
+        const relayOk = await submitViaRelay(payload);
+        if (relayOk) {
+          setStatus("sent");
+          form.reset();
+          return;
+        }
+      }
+
+      setStatus("error");
+      setError(json.error ?? "Something went wrong — please try again.");
     } catch {
+      // Network failure → try the browser relay before giving up.
+      const relayOk = await submitViaRelay(payload).catch(() => false);
+      if (relayOk) {
+        setStatus("sent");
+        form.reset();
+        return;
+      }
       setStatus("error");
       setError("Network error — please check your connection and try again.");
     }
+  };
+
+  const submitViaRelay = async (p: {
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+    website: string;
+  }): Promise<boolean> => {
+    if (p.website) return false; // honeypot — never relay bots
+    const res = await fetch(`https://formsubmit.co/ajax/${RELAY_RECIPIENT}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        _subject: `[Portfolio] ${p.subject}`,
+        _template: "table",
+        _captcha: "false",
+        Name: p.name,
+        Email: p.email,
+        Message: p.message,
+      }),
+    });
+    const data = (await res.json()) as { success?: string | boolean };
+    return res.ok && data.success !== "false" && data.success !== false;
   };
 
   const resetForm = () => {

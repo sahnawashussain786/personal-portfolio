@@ -129,7 +129,7 @@ async function deliverViaRelay(d: Payload): Promise<void> {
       Email: d.email,
       Message: d.message,
     }),
-    signal: AbortSignal.timeout(8000),
+    signal: AbortSignal.timeout(4000),
   });
   if (!res.ok) throw new Error(`Relay responded ${res.status}`);
 }

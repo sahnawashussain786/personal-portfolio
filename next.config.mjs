@@ -10,7 +10,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
   "img-src 'self' data: blob:",
-  "connect-src 'self'",
+  "connect-src 'self' https://formsubmit.co",
   "form-action 'self' https://formsubmit.co",
   "frame-ancestors 'none'",
   "base-uri 'self'",
