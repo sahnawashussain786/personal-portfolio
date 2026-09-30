@@ -9,9 +9,8 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
-    <motion.a
-      href={project.demo}
-      data-cursor="Open"
+    <motion.div
+      data-cursor="View"
       initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
@@ -68,6 +67,31 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               </span>
             ))}
           </div>
+
+          {/* project links — paste your Vercel URL into `demo` in src/lib/data.ts */}
+          <div className="mt-6 flex items-center gap-5 border-t border-white/10 pt-5">
+            <a
+              href={project.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/link flex items-center gap-1.5 font-mono text-xs text-cyan-300 transition-colors hover:text-cyan-200"
+            >
+              Live demo
+              <ArrowUpRight
+                size={14}
+                className="transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
+              />
+            </a>
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/link flex items-center gap-1.5 font-mono text-xs text-slate-400 transition-colors hover:text-slate-200"
+            >
+              <Github size={14} />
+              Source code
+            </a>
+          </div>
         </div>
 
         {/* accent glow line */}
@@ -78,7 +102,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           }}
         />
       </div>
-    </motion.a>
+    </motion.div>
   );
 }
 
