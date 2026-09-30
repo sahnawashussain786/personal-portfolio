@@ -13,19 +13,19 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Hussain — Full-Stack Developer",
+  title: "Hussain — MERN Stack Developer",
   description:
-    "Portfolio of Hussain, a full-stack developer crafting immersive, high-performance web experiences with React, Node.js and WebGL.",
+    "Portfolio of Hussain, a MERN stack developer building full-stack products with MongoDB, Express, React and Node.js — fast, scalable and beautifully animated.",
   openGraph: {
-    title: "Hussain — Full-Stack Developer",
+    title: "Hussain — MERN Stack Developer",
     description:
-      "Immersive, high-performance web experiences built with React, Node.js and WebGL.",
+      "Full-stack products built with MongoDB, Express, React and Node.js.",
     type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05010f",
+  themeColor: "#050a09",
 };
 
 export default function RootLayout({

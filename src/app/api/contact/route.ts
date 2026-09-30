@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 
-
 /**
  * Contact form delivery
  * ---------------------
@@ -60,16 +59,25 @@ function rateLimited(ip: string): boolean {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-function validate(body: Partial<Payload>): { ok: true; data: Payload } | { ok: false; error: string } {
+function validate(
+  body: Partial<Payload>
+): { ok: true; data: Payload } | { ok: false; error: string } {
   const name = (body.name ?? "").toString().trim();
   const email = (body.email ?? "").toString().trim();
   const subject = (body.subject ?? "").toString().trim();
   const message = (body.message ?? "").toString().trim();
 
-  if (!name || name.length > 100) return { ok: false, error: "Please enter your name (max 100 characters)." };
-  if (!EMAIL_RE.test(email) || email.length > 200) return { ok: false, error: "Please enter a valid email address." };
-  if (!subject || subject.length > 150) return { ok: false, error: "Please enter a subject (max 150 characters)." };
-  if (!message || message.length > 5000) return { ok: false, error: "Please enter a message (max 5000 characters)." };
+  if (!name || name.length > 100)
+    return { ok: false, error: "Please enter your name (max 100 characters)." };
+  if (!EMAIL_RE.test(email) || email.length > 200)
+    return { ok: false, error: "Please enter a valid email address." };
+  if (!subject || subject.length > 150)
+    return { ok: false, error: "Please enter a subject (max 150 characters)." };
+  if (!message || message.length > 5000)
+    return {
+      ok: false,
+      error: "Please enter a message (max 5000 characters).",
+    };
 
   return { ok: true, data: { name, email, subject, message } };
 }
@@ -77,7 +85,11 @@ function validate(body: Partial<Payload>): { ok: true; data: Payload } | { ok: f
 /* ------------------------------- deliveries ------------------------------- */
 
 const escapeHtml = (s: string) =>
-  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 
 async function deliverViaSmtp(d: Payload): Promise<void> {
   const nodemailer = (await import("nodemailer")).default;
@@ -96,8 +108,12 @@ async function deliverViaSmtp(d: Payload): Promise<void> {
         <h2 style="margin:0;color:#fff;font-size:18px">New portfolio message</h2>
       </div>
       <div style="padding:28px;color:#e5e7eb;font-size:14px;line-height:1.7">
-        <p><strong style="color:#22d3ee">From:</strong> ${escapeHtml(d.name)} &lt;${escapeHtml(d.email)}&gt;</p>
-        <p><strong style="color:#22d3ee">Subject:</strong> ${escapeHtml(d.subject)}</p>
+        <p><strong style="color:#22d3ee">From:</strong> ${escapeHtml(
+          d.name
+        )} &lt;${escapeHtml(d.email)}&gt;</p>
+        <p><strong style="color:#22d3ee">Subject:</strong> ${escapeHtml(
+          d.subject
+        )}</p>
         <hr style="border:none;border-top:1px solid #1f2937;margin:16px 0" />
         <p style="white-space:pre-wrap;margin:0">${escapeHtml(d.message)}</p>
       </div>
@@ -133,17 +149,26 @@ export async function POST(request: Request) {
   const origin = request.headers.get("origin");
   const host = request.headers.get("host");
   if (origin && host && new URL(origin).host !== host) {
-    return NextResponse.json({ ok: false, error: "Forbidden." }, { status: 403 });
+    return NextResponse.json(
+      { ok: false, error: "Forbidden." },
+      { status: 403 }
+    );
   }
 
   const contentType = request.headers.get("content-type") ?? "";
   if (!contentType.includes("application/json")) {
-    return NextResponse.json({ ok: false, error: "Unsupported media type." }, { status: 415 });
+    return NextResponse.json(
+      { ok: false, error: "Unsupported media type." },
+      { status: 415 }
+    );
   }
 
   const contentLength = Number(request.headers.get("content-length") ?? 0);
   if (contentLength > 20_000) {
-    return NextResponse.json({ ok: false, error: "Payload too large." }, { status: 413 });
+    return NextResponse.json(
+      { ok: false, error: "Payload too large." },
+      { status: 413 }
+    );
   }
 
   const ip =
@@ -155,7 +180,10 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as Partial<Payload>;
   } catch {
-    return NextResponse.json({ ok: false, error: "Invalid request body." }, { status: 400 });
+    return NextResponse.json(
+      { ok: false, error: "Invalid request body." },
+      { status: 400 }
+    );
   }
 
   // Honeypot: bots fill every field. Pretend success, send nothing.
@@ -165,14 +193,20 @@ export async function POST(request: Request) {
 
   if (rateLimited(ip)) {
     return NextResponse.json(
-      { ok: false, error: "Too many messages — please try again in a few minutes." },
-      { status: 200 },
+      {
+        ok: false,
+        error: "Too many messages — please try again in a few minutes.",
+      },
+      { status: 200 }
     );
   }
 
   const result = validate(body);
   if (!result.ok) {
-    return NextResponse.json({ ok: false, error: result.error }, { status: 400 });
+    return NextResponse.json(
+      { ok: false, error: result.error },
+      { status: 400 }
+    );
   }
 
   const useSmtp = Boolean(process.env.SMTP_USER && process.env.SMTP_PASS);
@@ -186,9 +220,10 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           ok: false,
-          error: "Message could not be sent right now — please email me directly instead.",
+          error:
+            "Message could not be sent right now — please email me directly instead.",
         },
-        { status: 200 },
+        { status: 200 }
       );
     }
   }

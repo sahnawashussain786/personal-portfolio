@@ -13,7 +13,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
 // accepts the visitor's own browser submission, which carries the site origin.
 const RELAY_RECIPIENT = "sahnawashussain98@gmail.com";
 const inputCls =
-  "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none transition focus:border-cyan-400/60 focus:bg-white/10";
+  "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none transition focus:border-emerald-400/60 focus:bg-white/10";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -130,8 +130,8 @@ export default function Contact() {
           transition={{ duration: 0.8, ease }}
         >
           <p className="mx-auto mb-12 max-w-xl text-center text-lg text-slate-400">
-            My inbox is always open — whether you have a project in mind, a
-            role to discuss, or just want to talk shaders and systems design.
+            My inbox is always open — whether you have a MERN project in mind,
+            a role to discuss, or just want to talk APIs and systems design.
           </p>
 
           <div className="glass rounded-3xl p-6 sm:p-8 md:p-10">
@@ -149,11 +149,11 @@ export default function Contact() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", stiffness: 260, damping: 14, delay: 0.1 }}
-                    className="flex h-16 w-16 items-center justify-center rounded-full bg-cyan-500/15 shadow-[0_0_50px_-8px_rgba(34,211,238,0.8)]"
+                    className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/15 shadow-[0_0_50px_-8px_rgba(0,237,100,0.8)]"
                   >
-                    <CheckCircle2 size={32} className="text-cyan-300" />
+                    <CheckCircle2 size={32} className="text-emerald-300" />
                     <motion.span
-                      className="absolute h-16 w-16 rounded-full border border-cyan-400/40"
+                      className="absolute h-16 w-16 rounded-full border border-emerald-400/40"
                       animate={{ scale: [1, 1.6], opacity: [0.8, 0] }}
                       transition={{ duration: 1.4, repeat: Infinity, ease: "easeOut" }}
                     />
@@ -167,7 +167,7 @@ export default function Contact() {
                     </p>
                     <button
                       onClick={resetForm}
-                      className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2 text-sm text-slate-300 transition hover:border-cyan-400/50 hover:text-cyan-300"
+                      className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2 text-sm text-slate-300 transition hover:border-emerald-400/50 hover:text-emerald-300"
                     >
                       <RefreshCw size={14} /> Send another
                     </button>
@@ -244,7 +244,7 @@ export default function Contact() {
                     <button
                       type="submit"
                       disabled={status === "sending"}
-                      className="group inline-flex min-w-48 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 px-8 py-3.5 font-medium text-white shadow-[0_0_40px_-10px_rgba(139,92,246,0.8)] transition hover:shadow-[0_0_60px_-8px_rgba(139,92,246,1)] disabled:opacity-80"
+                      className="group inline-flex min-w-48 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-8 py-3.5 font-medium text-white shadow-[0_0_40px_-10px_rgba(0,237,100,0.7)] transition hover:shadow-[0_0_60px_-8px_rgba(0,237,100,0.9)] disabled:opacity-80"
                     >
                       {status === "idle" && (
                         <>
@@ -272,7 +272,7 @@ export default function Contact() {
             <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-slate-400 sm:flex-row">
               <a
                 href={`mailto:${profile.email}`}
-                className="flex items-center gap-2 transition-colors hover:text-cyan-300"
+                className="flex items-center gap-2 transition-colors hover:text-emerald-300"
               >
                 <Mail size={15} /> {profile.email}
               </a>
@@ -284,7 +284,7 @@ export default function Contact() {
                     target="_blank"
                     rel="noreferrer"
                     aria-label={s.label}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-slate-400 transition hover:border-cyan-400/50 hover:text-cyan-300 hover:shadow-[0_0_20px_-4px_rgba(34,211,238,0.6)]"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-slate-400 transition hover:border-emerald-400/50 hover:text-emerald-300 hover:shadow-[0_0_20px_-4px_rgba(0,237,100,0.6)]"
                   >
                     <s.icon size={16} />
                   </a>

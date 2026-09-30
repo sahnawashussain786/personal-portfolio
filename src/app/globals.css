@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-void: #05010f;
-  --color-abyss: #0a0620;
-  --color-neon: #22d3ee;
-  --color-pulse: #8b5cf6;
-  --color-bloom: #e879f9;
+  --color-void: #050a09;
+  --color-abyss: #06120f;
+  --color-mongo: #00ed64;
+  --color-react: #61dafb;
+  --color-node: #3c873a;
+  --color-volt: #a3e635;
   --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
@@ -26,7 +27,7 @@ body {
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.45);
+  background: rgba(0, 237, 100, 0.35);
   color: #fff;
 }
 
@@ -38,9 +39,9 @@ body {
   background: #05010f;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #22d3ee, #8b5cf6, #e879f9);
+  background: linear-gradient(180deg, #00ed64, #61dafb, #a3e635);
   border-radius: 8px;
-  border: 2px solid #05010f;
+  border: 2px solid #050a09;
 }
 
 /* ------------------------------ custom cursor ------------------------------- */
@@ -53,7 +54,7 @@ body {
 
 /* ------------------------------- text effects ------------------------------- */
 .text-gradient {
-  background: linear-gradient(100deg, #22d3ee 0%, #8b5cf6 45%, #e879f9 100%);
+  background: linear-gradient(100deg, #61dafb 0%, #00ed64 45%, #a3e635 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -120,11 +121,11 @@ body {
   0%,
   100% {
     opacity: 1;
-    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.55);
+    box-shadow: 0 0 0 0 rgba(0, 237, 100, 0.55);
   }
   50% {
     opacity: 0.75;
-    box-shadow: 0 0 0 7px rgba(34, 211, 238, 0);
+    box-shadow: 0 0 0 7px rgba(0, 237, 100, 0);
   }
 }
 .animate-pulse-dot {

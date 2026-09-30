@@ -24,14 +24,14 @@ export default function Footer() {
         <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-slate-500 md:flex-row">
           <p>© 2026 {profile.name}. All rights reserved.</p>
           <p className="flex items-center gap-1.5">
-            Built with <Heart size={13} className="text-fuchsia-500" /> using
-            Next.js, Three.js & GSAP-grade motion
+            Built with <Heart size={13} className="text-emerald-500" /> using
+            MongoDB, Express, React, Node.js & Three.js
           </p>
           <MagneticButton strength={0.3}>
             <a
               href="#top"
               aria-label="Back to top"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-slate-300 transition hover:border-cyan-400/50 hover:text-cyan-300 hover:shadow-[0_0_24px_-6px_rgba(34,211,238,0.7)]"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-slate-300 transition hover:border-emerald-400/50 hover:text-emerald-300 hover:shadow-[0_0_24px_-6px_rgba(0,237,100,0.7)]"
             >
               <ArrowUp size={16} />
             </a>

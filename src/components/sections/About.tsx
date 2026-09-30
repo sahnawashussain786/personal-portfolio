@@ -16,7 +16,7 @@ export default function About() {
         <SectionHeading
           index="01"
           subtitle="who I am"
-          title="Engineering meets design"
+          title="Full-stack, by design"
         />
 
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
@@ -29,22 +29,24 @@ export default function About() {
           >
             <p>
               I&apos;m <span className="text-slate-100">{profile.name}</span> — a
-              full-stack developer who treats the browser as a canvas and the
-              server as an engine room. For{" "}
+              MERN stack developer who treats the browser as a canvas and
+              Node.js as the engine room. For{" "}
               <span className="text-gradient font-semibold">5+ years</span> I&apos;ve
-              shipped products across fintech, e-commerce and developer tooling.
+              shipped products across e-commerce, social platforms and developer
+              tooling.
             </p>
             <p>
               My sweet spot is the full journey: sculpting pixel-perfect,
-              motion-rich interfaces, then backing them with resilient APIs,
-              real-time systems and infrastructure that scales. If it lives on
-              the web, I can build it — and make it feel{" "}
+              motion-rich React interfaces, then backing them with Express APIs,
+              MongoDB schemas and real-time systems that scale. From
+              <code className="mx-1 rounded bg-white/10 px-1.5 py-0.5 font-mono text-[0.85em] text-emerald-300">app.get()</code>
+              to the final render, I own every layer — and make it feel{" "}
               <em className="text-slate-200">effortless</em>.
             </p>
             <p>
               When I&apos;m not coding you&apos;ll find me contributing to open
-              source, experimenting with generative art, or chasing perfect
-              espresso ratios.
+              source, experimenting with WebGL, or chasing perfect espresso
+              ratios.
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-4">
@@ -52,7 +54,7 @@ export default function About() {
                 <a
                   href="#contact"
                   data-cursor="Say hi"
-                  className="inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-500/10 px-6 py-2.5 text-sm text-cyan-200 transition hover:bg-cyan-500/20"
+                  className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-6 py-2.5 text-sm text-emerald-200 transition hover:bg-emerald-500/20"
                 >
                   <MapPin size={15} /> {profile.location}
                 </a>
@@ -76,7 +78,7 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: i * 0.08, ease }}
-                className="glass group rounded-2xl p-6 text-center transition-all duration-500 hover:border-cyan-400/40 hover:shadow-[0_0_50px_-12px_rgba(34,211,238,0.45)]"
+                className="glass group rounded-2xl p-6 text-center transition-all duration-500 hover:border-emerald-400/40 hover:shadow-[0_0_50px_-12px_rgba(0,237,100,0.45)]"
               >
                 <Counter
                   to={s.value}

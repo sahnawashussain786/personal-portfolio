@@ -46,22 +46,22 @@ export default function Cursor() {
   return (
     <>
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[95] h-2 w-2 rounded-full bg-cyan-300"
+        className="pointer-events-none fixed left-0 top-0 z-[95] h-2 w-2 rounded-full bg-emerald-300"
         style={{ x, y, translateX: "-50%", translateY: "-50%" }}
       />
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[94] flex items-center justify-center rounded-full border border-violet-400/70"
+        className="pointer-events-none fixed left-0 top-0 z-[94] flex items-center justify-center rounded-full border border-cyan-400/70"
         style={{ x: ringX, y: ringY, translateX: "-50%", translateY: "-50%" }}
         animate={{
           width: variant === "hover" ? 72 : 36,
           height: variant === "hover" ? 72 : 36,
           backgroundColor:
-            variant === "hover" ? "rgba(139,92,246,0.14)" : "rgba(139,92,246,0)",
+            variant === "hover" ? "rgba(97,218,251,0.14)" : "rgba(97,218,251,0)",
         }}
         transition={{ type: "spring", stiffness: 300, damping: 22 }}
       >
         {label && (
-          <span className="text-[10px] font-semibold uppercase tracking-widest text-cyan-200">
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-emerald-200">
             {label}
           </span>
         )}

@@ -49,13 +49,13 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
 
         <div className="mt-8 h-px w-56 overflow-hidden rounded-full bg-white/10">
           <div
-            className="h-full origin-left bg-gradient-to-r from-cyan-400 via-violet-500 to-fuchsia-500 transition-transform duration-100 ease-linear"
+            className="h-full origin-left bg-gradient-to-r from-emerald-400 via-cyan-400 to-lime-300 transition-transform duration-100 ease-linear"
             style={{ transform: `scaleX(${count / 100})` }}
           />
         </div>
 
         <p className="mt-6 font-mono text-xs uppercase tracking-[0.4em] text-slate-500">
-          Initializing experience
+          Booting MERN stack
         </p>
       </motion.div>
 

@@ -33,7 +33,7 @@ export default function Navbar() {
   return (
     <>
       <motion.div
-        className="fixed inset-x-0 top-0 z-[70] h-[2px] origin-left bg-gradient-to-r from-cyan-400 via-violet-500 to-fuchsia-500"
+        className="fixed inset-x-0 top-0 z-[70] h-[2px] origin-left bg-gradient-to-r from-emerald-400 via-cyan-400 to-lime-300"
         style={{ scaleX: progress }}
       />
       <motion.header
@@ -57,11 +57,11 @@ export default function Navbar() {
                   href={l.href}
                   className="group relative text-sm text-slate-300 transition-colors hover:text-white"
                 >
-                  <span className="mr-1 font-mono text-xs text-cyan-400">
+                  <span className="mr-1 font-mono text-xs text-emerald-400">
                     0{i + 1}.
                   </span>
                   {l.label}
-                  <span className="absolute -bottom-1 left-0 h-px w-0 bg-gradient-to-r from-cyan-400 to-fuchsia-500 transition-all duration-300 group-hover:w-full" />
+                  <span className="absolute -bottom-1 left-0 h-px w-0 bg-gradient-to-r from-emerald-400 to-cyan-400 transition-all duration-300 group-hover:w-full" />
                 </a>
               </li>
             ))}
@@ -69,7 +69,7 @@ export default function Navbar() {
 
           <a
             href="#contact"
-            className="hidden rounded-full border border-violet-400/40 bg-violet-500/10 px-5 py-2 text-sm font-medium text-violet-200 transition hover:bg-violet-500/20 hover:shadow-[0_0_24px_-6px_rgba(139,92,246,0.7)] md:block"
+            className="hidden rounded-full border border-emerald-400/40 bg-emerald-500/10 px-5 py-2 text-sm font-medium text-emerald-200 transition hover:bg-emerald-500/20 hover:shadow-[0_0_24px_-6px_rgba(0,237,100,0.7)] md:block"
           >
             Hire me
           </a>
@@ -101,7 +101,7 @@ export default function Navbar() {
                   onClick={() => setOpen(false)}
                   className="block py-2 font-display text-lg text-slate-200"
                 >
-                  <span className="mr-2 font-mono text-xs text-cyan-400">
+                  <span className="mr-2 font-mono text-xs text-emerald-400">
                     0{i + 1}.
                   </span>
                   {l.label}

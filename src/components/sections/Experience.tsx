@@ -17,7 +17,7 @@ export default function Experience() {
         />
 
         <div className="relative">
-          <div className="absolute bottom-0 left-[7px] top-0 w-px bg-gradient-to-b from-cyan-400/60 via-violet-500/40 to-transparent md:left-1/2" />
+          <div className="absolute bottom-0 left-[7px] top-0 w-px bg-gradient-to-b from-emerald-400/60 via-cyan-500/40 to-transparent md:left-1/2" />
 
           {experience.map((job, i) => {
             const left = i % 2 === 0;
@@ -33,18 +33,18 @@ export default function Experience() {
                 }`}
               >
                 <span
-                  className={`absolute top-1.5 h-4 w-4 rounded-full border-2 border-void bg-gradient-to-br from-cyan-400 to-fuchsia-500 shadow-[0_0_16px_rgba(34,211,238,0.7)] left-0 md:left-auto ${
+                  className={`absolute top-1.5 h-4 w-4 rounded-full border-2 border-void bg-gradient-to-br from-emerald-400 to-cyan-500 shadow-[0_0_16px_rgba(0,237,100,0.7)] left-0 md:left-auto ${
                     left ? "md:-right-2" : "md:-left-2"
                   }`}
                 />
                 <div className="glass rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1 hover:border-white/20">
-                  <span className="font-mono text-xs text-cyan-400">
+                  <span className="font-mono text-xs text-emerald-400">
                     {job.period}
                   </span>
                   <h3 className="mt-1 font-display text-xl font-semibold text-slate-100">
                     {job.role}
                   </h3>
-                  <p className="mb-3 text-sm text-violet-300">{job.company}</p>
+                  <p className="mb-3 text-sm text-cyan-300">{job.company}</p>
                   <p className="mb-4 text-sm leading-relaxed text-slate-400">
                     {job.description}
                   </p>

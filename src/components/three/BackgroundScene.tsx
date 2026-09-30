@@ -11,6 +11,14 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { scrollProgress, SCENE_DEPTH } from "@/lib/scroll";
 
+/* MERN palette: React cyan, MongoDB green, Node green, volt lime */
+const C = {
+  react: "#61dafb",
+  mongo: "#00ed64",
+  node: "#3c873a",
+  volt: "#a3e635",
+};
+
 /* ------------------------------- particles ---------------------------------- */
 
 function Particles({ count = 1600 }: { count?: number }) {
@@ -21,9 +29,9 @@ function Particles({ count = 1600 }: { count?: number }) {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     const palette = [
-      new THREE.Color("#22d3ee"),
-      new THREE.Color("#8b5cf6"),
-      new THREE.Color("#e879f9"),
+      new THREE.Color(C.mongo),
+      new THREE.Color(C.react),
+      new THREE.Color(C.volt),
     ];
     for (let i = 0; i < count; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 32;
@@ -60,37 +68,44 @@ function Particles({ count = 1600 }: { count?: number }) {
   );
 }
 
-/* --------------------------------- hero core -------------------------------- */
+/* ------------------------------- react atom --------------------------------- */
+/* Hero set-piece: the React logo as a 3D atom — glowing nucleus with three
+   orbital rings, each carrying an orbiting electron. */
 
-function HeroCore() {
+function ReactAtom() {
   const group = useRef<THREE.Group>(null);
-  const rings = useRef<THREE.Group>(null);
-  const sat1 = useRef<THREE.Mesh>(null);
-  const sat2 = useRef<THREE.Mesh>(null);
+  const orbits = useRef<THREE.Group>(null);
+  const e1 = useRef<THREE.Mesh>(null);
+  const e2 = useRef<THREE.Mesh>(null);
+  const e3 = useRef<THREE.Mesh>(null);
 
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
-    if (rings.current) {
-      rings.current.rotation.z += delta * 0.15;
-      rings.current.rotation.x = Math.sin(t * 0.3) * 0.25;
+    if (orbits.current) {
+      orbits.current.rotation.z += delta * 0.12;
+      orbits.current.rotation.x = Math.sin(t * 0.3) * 0.2;
     }
-    if (sat1.current) {
-      const a = t * 0.7;
-      sat1.current.position.set(
-        Math.cos(a) * 3.1,
-        Math.sin(a) * 0.9,
-        Math.sin(a) * 3.1
-      );
-      sat1.current.rotation.y += delta;
+    // Electrons ride their rings (ring radius 2.5 tilted by 60° around X).
+    const R = 2.5;
+    if (e1.current) {
+      const a = t * 1.1;
+      e1.current.position.set(Math.cos(a) * R, 0, Math.sin(a) * R);
     }
-    if (sat2.current) {
-      const a = -t * 0.5 + 2;
-      sat2.current.position.set(
-        Math.cos(a) * 3.8,
-        Math.cos(a * 0.7) * 1.2,
-        Math.sin(a) * 3.8
+    if (e2.current) {
+      const a = -t * 0.85 + 2.1;
+      e2.current.position.set(
+        Math.cos(a) * R,
+        Math.sin(a) * R * Math.sin(Math.PI / 3),
+        Math.sin(a) * R * Math.cos(Math.PI / 3)
       );
-      sat2.current.rotation.x += delta * 1.4;
+    }
+    if (e3.current) {
+      const a = t * 0.95 + 4.2;
+      e3.current.position.set(
+        Math.cos(a) * R,
+        Math.sin(a) * R * Math.sin(-Math.PI / 3),
+        Math.sin(a) * R * Math.cos(-Math.PI / 3)
+      );
     }
     if (group.current) {
       group.current.rotation.y = THREE.MathUtils.damp(
@@ -110,57 +125,71 @@ function HeroCore() {
 
   return (
     <group ref={group}>
+      {/* nucleus — softly morphing core */}
       <Float speed={1.6} rotationIntensity={0.5} floatIntensity={0.9}>
         <mesh>
-          <sphereGeometry args={[1.55, 64, 64]} />
+          <sphereGeometry args={[1.15, 64, 64]} />
           <MeshDistortMaterial
-            color="#7c3aed"
-            emissive="#4c1d95"
+            color="#0e7490"
+            emissive={C.react}
             emissiveIntensity={0.55}
             metalness={0.85}
             roughness={0.18}
-            distort={0.42}
+            distort={0.38}
             speed={2.2}
           />
         </mesh>
-        <mesh scale={1.32}>
-          <icosahedronGeometry args={[1.55, 1]} />
-          <meshBasicMaterial color="#22d3ee" wireframe transparent opacity={0.28} />
+        {/* hex wireframe shell — a nod to the Node hexagon */}
+        <mesh scale={1.5}>
+          <icosahedronGeometry args={[1.15, 1]} />
+          <meshBasicMaterial color={C.mongo} wireframe transparent opacity={0.3} />
         </mesh>
       </Float>
 
-      <group ref={rings}>
-        <mesh rotation={[Math.PI / 2.15, 0.3, 0]}>
-          <torusGeometry args={[2.5, 0.018, 16, 128]} />
-          <meshBasicMaterial color="#22d3ee" transparent opacity={0.75} />
+      {/* three orbital rings, React-logo style */}
+      <group ref={orbits}>
+        <mesh rotation={[Math.PI / 3, 0, 0]}>
+          <torusGeometry args={[2.5, 0.02, 16, 160]} />
+          <meshBasicMaterial color={C.react} transparent opacity={0.8} />
         </mesh>
-        <mesh rotation={[Math.PI / 1.8, -0.5, 0.4]}>
-          <torusGeometry args={[2.95, 0.014, 16, 128]} />
-          <meshBasicMaterial color="#e879f9" transparent opacity={0.6} />
+        <mesh rotation={[-Math.PI / 3, 0, Math.PI / 3]}>
+          <torusGeometry args={[2.5, 0.02, 16, 160]} />
+          <meshBasicMaterial color={C.react} transparent opacity={0.65} />
         </mesh>
-        <mesh rotation={[Math.PI / 2.5, 0.9, -0.3]}>
-          <torusGeometry args={[3.35, 0.01, 16, 128]} />
-          <meshBasicMaterial color="#8b5cf6" transparent opacity={0.5} />
+        <mesh rotation={[-Math.PI / 3, 0, -Math.PI / 3]}>
+          <torusGeometry args={[2.5, 0.02, 16, 160]} />
+          <meshBasicMaterial color={C.react} transparent opacity={0.65} />
         </mesh>
       </group>
 
-      <mesh ref={sat1}>
-        <octahedronGeometry args={[0.22]} />
+      {/* electrons */}
+      <mesh ref={e1}>
+        <sphereGeometry args={[0.16, 24, 24]} />
         <meshStandardMaterial
-          color="#22d3ee"
-          emissive="#0e7490"
-          emissiveIntensity={1.4}
-          metalness={0.9}
-          roughness={0.2}
+          color={C.mongo}
+          emissive={C.mongo}
+          emissiveIntensity={1.6}
+          metalness={0.6}
+          roughness={0.25}
         />
       </mesh>
-      <mesh ref={sat2}>
-        <torusKnotGeometry args={[0.18, 0.06, 96, 12]} />
+      <mesh ref={e2}>
+        <sphereGeometry args={[0.14, 24, 24]} />
         <meshStandardMaterial
-          color="#e879f9"
-          emissive="#a21caf"
-          emissiveIntensity={1.2}
-          metalness={0.85}
+          color={C.volt}
+          emissive={C.volt}
+          emissiveIntensity={1.5}
+          metalness={0.6}
+          roughness={0.25}
+        />
+      </mesh>
+      <mesh ref={e3}>
+        <sphereGeometry args={[0.14, 24, 24]} />
+        <meshStandardMaterial
+          color={C.react}
+          emissive={C.react}
+          emissiveIntensity={1.6}
+          metalness={0.6}
           roughness={0.25}
         />
       </mesh>
@@ -168,60 +197,94 @@ function HeroCore() {
   );
 }
 
-/* --------------------------- scroll gate (portal 1) -------------------------- */
+/* ----------------------------- mongo data stack ------------------------------ */
+/* Second set-piece: a stack of glowing database discs (MongoDB storage vibe)
+   with a leaf-like octahedron blooming above. */
 
-function ScrollGate() {
+function MongoStack() {
   const group = useRef<THREE.Group>(null);
+  const leaf = useRef<THREE.Mesh>(null);
 
   useFrame((state, delta) => {
-    if (!group.current) return;
-    group.current.rotation.z += delta * 0.1;
-    group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.25) * 0.2;
+    if (group.current) {
+      group.current.rotation.z += delta * 0.08;
+      group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.25) * 0.2;
+    }
+    if (leaf.current) leaf.current.rotation.y += delta * 0.6;
   });
+
+  const discs = [1.9, 1.55, 1.2].map((r, i) => ({
+    y: -0.9 + i * 0.85,
+    r,
+    c: [C.mongo, "#10b981", C.node][i],
+    o: [0.85, 0.7, 0.55][i],
+  }));
 
   return (
     <group position={[0, -11, -1]}>
       <group ref={group}>
-        {[4.2, 3.3, 2.4].map((r, i) => (
-          <mesh key={r} rotation={[0, 0, i * 0.9]}>
-            <torusGeometry args={[r, 0.025, 16, 160]} />
-            <meshBasicMaterial
-              color={["#22d3ee", "#8b5cf6", "#e879f9"][i]}
-              transparent
-              opacity={0.55}
+        {/* database discs */}
+        {discs.map((d, i) => (
+          <group key={i} position={[0, d.y, 0]}>
+            <mesh rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[d.r, d.r, 0.28, 48]} />
+              <meshStandardMaterial
+                color={d.c}
+                emissive={d.c}
+                emissiveIntensity={0.35}
+                metalness={0.85}
+                roughness={0.2}
+              />
+            </mesh>
+            <mesh rotation={[Math.PI / 2, 0, 0]} scale={1.001}>
+              <torusGeometry args={[d.r, 0.022, 12, 96]} />
+              <meshBasicMaterial color={C.mongo} transparent opacity={d.o} />
+            </mesh>
+          </group>
+        ))}
+
+        {/* leaf crystal rising from the stack */}
+        <Float speed={1.5} rotationIntensity={0.6} floatIntensity={1.2}>
+          <mesh ref={leaf} position={[0, 1.9, 0]}>
+            <octahedronGeometry args={[0.62, 0]} />
+            <meshStandardMaterial
+              color={C.mongo}
+              emissive="#059669"
+              emissiveIntensity={0.9}
+              metalness={0.9}
+              roughness={0.15}
+              flatShading
             />
           </mesh>
-        ))}
+        </Float>
+
+        {/* orbiting data bits */}
+        <mesh>
+          <torusGeometry args={[2.7, 0.014, 8, 128]} />
+          <meshBasicMaterial color={C.volt} transparent opacity={0.4} />
+        </mesh>
       </group>
-      <mesh>
-        <sphereGeometry args={[1.1, 48, 48]} />
-        <MeshWobbleMaterial
-          color="#312e81"
-          emissive="#6d28d9"
-          emissiveIntensity={0.5}
-          metalness={0.9}
-          roughness={0.2}
-          factor={0.7}
-          speed={1.5}
-        />
-      </mesh>
-      <Sparkles count={90} scale={[9, 9, 5] as const} size={2.4} speed={0.4} color="#a5f3fc" />
+
+      <Sparkles count={90} scale={[9, 9, 5] as const} size={2.4} speed={0.4} color="#6ee7b7" />
     </group>
   );
 }
 
-/* ------------------------------ crystal cluster ------------------------------ */
+/* ------------------------------ node hex field ------------------------------- */
+/* Third set-piece: a drifting field of hexagonal prisms — the Node.js hexagon,
+   standing in as glowing server towers. */
 
-const CRYSTALS: { p: [number, number, number]; s: number; c: string }[] = [
-  { p: [-3.2, 0.4, -1.5], s: 0.9, c: "#22d3ee" },
-  { p: [3.4, -0.8, -2], s: 1.1, c: "#8b5cf6" },
-  { p: [0.6, 1.6, -3], s: 0.7, c: "#e879f9" },
-  { p: [-1.8, -1.8, -0.5], s: 0.6, c: "#8b5cf6" },
-  { p: [2.2, 1.2, 0.5], s: 0.5, c: "#22d3ee" },
-  { p: [4.6, 0.2, -4], s: 0.8, c: "#e879f9" },
+const HEXES: { p: [number, number, number]; s: number; c: string }[] = [
+  { p: [-3.2, 0.4, -1.5], s: 0.9, c: C.node },
+  { p: [3.4, -0.8, -2], s: 1.1, c: C.mongo },
+  { p: [0.6, 1.6, -3], s: 0.7, c: C.react },
+  { p: [-1.8, -1.8, -0.5], s: 0.6, c: C.mongo },
+  { p: [2.2, 1.2, 0.5], s: 0.5, c: C.volt },
+  { p: [4.6, 0.2, -4], s: 0.8, c: C.node },
+  { p: [-4.4, -0.6, -3], s: 0.65, c: C.react },
 ];
 
-function CrystalCluster() {
+function NodeHexField() {
   const group = useRef<THREE.Group>(null);
 
   useFrame((_, delta) => {
@@ -231,71 +294,78 @@ function CrystalCluster() {
   return (
     <group position={[0, -20, 0]}>
       <group ref={group}>
-        {CRYSTALS.map((cr, i) => (
+        {HEXES.map((hx, i) => (
           <Float
             key={i}
             speed={1.4 + i * 0.2}
             rotationIntensity={1.2}
             floatIntensity={1.6}
           >
-            <group position={cr.p} scale={cr.s}>
-              <mesh>
-                <icosahedronGeometry args={[1, 0]} />
+            <group position={hx.p} scale={hx.s}>
+              {/* hex prism */}
+              <mesh rotation={[Math.PI / 2, 0, 0]}>
+                <cylinderGeometry args={[0.9, 0.9, 1.5, 6]} />
                 <meshStandardMaterial
-                  color={cr.c}
-                  emissive={cr.c}
-                  emissiveIntensity={0.35}
+                  color={hx.c}
+                  emissive={hx.c}
+                  emissiveIntensity={0.32}
                   metalness={0.9}
                   roughness={0.15}
                   flatShading
                 />
               </mesh>
-              <mesh scale={1.35}>
-                <icosahedronGeometry args={[1, 0]} />
-                <meshBasicMaterial color={cr.c} wireframe transparent opacity={0.3} />
+              {/* wireframe shell */}
+              <mesh rotation={[Math.PI / 2, 0, 0]} scale={1.18}>
+                <cylinderGeometry args={[0.9, 0.9, 1.5, 6]} />
+                <meshBasicMaterial color={hx.c} wireframe transparent opacity={0.3} />
               </mesh>
             </group>
           </Float>
         ))}
       </group>
-      <Sparkles count={70} scale={[10, 8, 6] as const} size={2} speed={0.35} color="#c4b5fd" />
+      <Sparkles count={70} scale={[10, 8, 6] as const} size={2} speed={0.35} color="#86efac" />
     </group>
   );
 }
 
-/* --------------------------- portal core (contact) --------------------------- */
+/* ------------------------------ code knot (contact) -------------------------- */
+/* Final set-piece: a torus knot reading as intertwined code/data, with a
+   spinning hex ring — the portal to the contact section. */
 
-function PortalCore() {
+function CodeKnot() {
   const ring = useRef<THREE.Mesh>(null);
+  const knot = useRef<THREE.Mesh>(null);
 
   useFrame((_, delta) => {
     if (ring.current) ring.current.rotation.z += delta * 0.25;
+    if (knot.current) knot.current.rotation.y += delta * 0.3;
   });
 
   return (
     <group position={[0, -30, -0.5]}>
       <Float speed={1.4} rotationIntensity={0.4} floatIntensity={0.8}>
-        <mesh>
-          <torusGeometry args={[2.1, 0.35, 32, 128]} />
+        <mesh ref={knot}>
+          <torusKnotGeometry args={[1.35, 0.38, 180, 24]} />
           <MeshWobbleMaterial
-            color="#7c3aed"
-            emissive="#c026d3"
-            emissiveIntensity={0.45}
+            color="#065f46"
+            emissive={C.mongo}
+            emissiveIntensity={0.5}
             metalness={0.85}
             roughness={0.2}
-            factor={0.5}
+            factor={0.45}
             speed={1.2}
           />
         </mesh>
+        {/* hex ring — Node hexagon halo */}
         <mesh ref={ring} rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[2.9, 0.02, 8, 128]} />
-          <meshBasicMaterial color="#22d3ee" transparent opacity={0.8} />
+          <torusGeometry args={[2.7, 0.02, 8, 6]} />
+          <meshBasicMaterial color={C.react} transparent opacity={0.8} />
         </mesh>
-        <mesh scale={0.55}>
+        <mesh scale={0.5} position={[0, -2.3, 0.5]}>
           <dodecahedronGeometry args={[1, 0]} />
           <meshStandardMaterial
-            color="#0ea5e9"
-            emissive="#0369a1"
+            color={C.volt}
+            emissive="#4d7c0f"
             emissiveIntensity={1}
             metalness={1}
             roughness={0.1}
@@ -303,7 +373,7 @@ function PortalCore() {
           />
         </mesh>
       </Float>
-      <Sparkles count={110} scale={[10, 10, 6] as const} size={2.6} speed={0.5} color="#f0abfc" />
+      <Sparkles count={110} scale={[10, 10, 6] as const} size={2.6} speed={0.5} color="#6ee7b7" />
     </group>
   );
 }
@@ -354,20 +424,20 @@ export default function BackgroundScene() {
         dpr={[1, 1.75]}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
-        <fog attach="fog" args={["#05010f", 9, 26]} />
+        <fog attach="fog" args={["#050a09", 9, 26]} />
         <ambientLight intensity={0.5} />
-        <pointLight position={[6, 4, 6]} intensity={80} color="#22d3ee" distance={30} />
-        <pointLight position={[-6, -2, 4]} intensity={80} color="#8b5cf6" distance={30} />
-        <pointLight position={[0, -12, 5]} intensity={70} color="#e879f9" distance={30} />
+        <pointLight position={[6, 4, 6]} intensity={80} color={C.react} distance={30} />
+        <pointLight position={[-6, -2, 4]} intensity={80} color={C.mongo} distance={30} />
+        <pointLight position={[0, -12, 5]} intensity={70} color={C.volt} distance={30} />
         <Particles />
-        <HeroCore />
-        <ScrollGate />
-        <CrystalCluster />
-        <PortalCore />
+        <ReactAtom />
+        <MongoStack />
+        <NodeHexField />
+        <CodeKnot />
         <CameraRig />
       </Canvas>
       {/* vignette keeps text readable over the scene */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(5,1,15,0.55)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(5,10,9,0.55)_100%)]" />
     </div>
   );
 }

@@ -27,7 +27,7 @@ function Row({
             }`}
           >
             {t}
-            <span className={`h-2.5 w-2.5 rounded-full ${outline ? "bg-fuchsia-500/60" : "bg-cyan-400/80"}`} />
+            <span className={`h-2.5 w-2.5 rounded-full ${outline ? "bg-cyan-400/60" : "bg-emerald-400/80"}`} />
           </span>
         ))}
       </div>

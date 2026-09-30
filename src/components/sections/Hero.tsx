@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChevronDown, ArrowUpRight, Sparkles } from "lucide-react";
+import { ChevronDown, ArrowUpRight, Terminal } from "lucide-react";
 import MagneticButton from "../MagneticButton";
 import { profile } from "@/lib/data";
 
@@ -26,12 +26,22 @@ export default function Hero() {
       className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center"
     >
       <motion.div variants={container} initial="hidden" animate="show">
-        <motion.div variants={item} className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 font-mono text-xs text-slate-300">
+        <motion.div
+          variants={item}
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/5 px-4 py-1.5 font-mono text-xs text-emerald-200"
+        >
           <span className="relative flex h-2 w-2">
-            <span className="animate-pulse-dot absolute h-full w-full rounded-full bg-cyan-400" />
+            <span className="animate-pulse-dot absolute h-full w-full rounded-full bg-emerald-400" />
           </span>
-          Available for new projects
+          {profile.availability}
         </motion.div>
+
+        <motion.p
+          variants={item}
+          className="mb-4 font-mono text-sm tracking-[0.35em] text-emerald-400/80 uppercase"
+        >
+          {profile.role}
+        </motion.p>
 
         <motion.h1
           variants={item}
@@ -57,8 +67,7 @@ export default function Hero() {
           variants={item}
           className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-slate-400 md:text-lg"
         >
-          I build immersive, high-performance web experiences — pairing beautiful
-          interfaces with backends that never blink.
+          {profile.tagline}
         </motion.p>
 
         <motion.div
@@ -69,9 +78,9 @@ export default function Hero() {
             <a
               href="#work"
               data-cursor="View"
-              className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 px-7 py-3 font-medium text-white shadow-[0_0_40px_-10px_rgba(139,92,246,0.8)] transition-shadow hover:shadow-[0_0_60px_-8px_rgba(139,92,246,1)]"
+              className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-7 py-3 font-medium text-white shadow-[0_0_40px_-10px_rgba(0,237,100,0.7)] transition-shadow hover:shadow-[0_0_60px_-8px_rgba(0,237,100,0.9)]"
             >
-              <Sparkles size={16} />
+              <Terminal size={16} />
               View my work
               <ArrowUpRight
                 size={16}
@@ -82,7 +91,7 @@ export default function Hero() {
           <MagneticButton>
             <a
               href="#contact"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-3 font-medium text-slate-200 backdrop-blur transition hover:border-white/30 hover:bg-white/10"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-3 font-medium text-slate-200 backdrop-blur transition hover:border-emerald-400/40 hover:bg-emerald-400/10"
             >
               Get in touch
             </a>
@@ -95,7 +104,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 4.2, duration: 1 }}
-        className="absolute bottom-8 flex flex-col items-center gap-1 text-slate-500 transition-colors hover:text-cyan-300"
+        className="absolute bottom-8 flex flex-col items-center gap-1 text-slate-500 transition-colors hover:text-emerald-300"
         aria-label="Scroll to about"
       >
         <span className="font-mono text-[10px] uppercase tracking-[0.3em]">Scroll</span>

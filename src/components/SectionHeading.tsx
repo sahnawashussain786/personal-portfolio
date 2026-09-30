@@ -26,7 +26,7 @@ export default function SectionHeading({
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         className="relative"
       >
-        <p className="mb-2 font-mono text-sm text-cyan-400">
+        <p className="mb-2 font-mono text-sm text-emerald-400">
           <span className="text-slate-500">{index}.</span> {subtitle}
         </p>
         <h2 className="font-display text-4xl font-bold text-slate-100 md:text-5xl">
@@ -37,7 +37,7 @@ export default function SectionHeading({
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-4 h-px w-40 origin-left bg-gradient-to-r from-cyan-400 via-violet-500 to-fuchsia-500"
+          className="mt-4 h-px w-40 origin-left bg-gradient-to-r from-emerald-400 via-cyan-400 to-lime-300"
         />
       </motion.div>
     </div>
